@@ -1,0 +1,5 @@
+nvm-windows / nvm (mac) - превключва м/у разл. версии на node
+https://docs.npmjs.com/files/package.json
+
+CPS - continuation passing style
+node . == npm run start
