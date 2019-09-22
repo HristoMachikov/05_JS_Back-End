@@ -1,3 +1,9 @@
+npm init
+npm run start (npm start)
+npm package.json
+
+Event Loop
+
 nvm-windows / nvm (mac) - превключва м/у разл. версии на node
 https://docs.npmjs.com/files/package.json
 
