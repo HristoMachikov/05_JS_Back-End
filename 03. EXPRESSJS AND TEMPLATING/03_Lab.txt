@@ -1,0 +1,5 @@
+req.send(user) - сетва head и  stringify_ва обекта + end
+error хендлара se слага след хендлърите 
+!! - преобразуват стойноста до булева променлива
+npm uninstal
+globul.__projectdir=__dirname

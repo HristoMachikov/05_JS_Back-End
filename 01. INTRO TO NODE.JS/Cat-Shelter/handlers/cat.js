@@ -68,23 +68,25 @@ module.exports = (req, res) => {
         });
 
     } else if (pathname === '/cats/add-cat' && req.method === 'POST') {
-        let globalPath = 'D:/Work Folder/SoftUni/05_JS_Back-End/01. INTRO TO NODE.JS/Cat-Shelter';
+        // let globalPath = __dirname;
         let form = new formidable.IncomingForm();
 
         form.parse(req, (err, fields, files) => {
             if (err) throw err;
+            
             let oldPath = files.upload.path;
-            let newPath = path.normalize(path.join(globalPath, '/content/images/' + files.upload.name));
-
+            let newPath = path.normalize(path.join(__dirname, '../', 'content/images/' + files.upload.name));
+            // console.log(oldPath);
+            // console.log(newPath);
             fs.rename(oldPath, newPath, (err) => {
                 if (err) throw err;
                 console.log('Filles was upload successfully!');
-            })
+            });
 
             fs.readFile('./data/cats.json', 'utf8', (err, data) => {
                 if (err) throw err;
                 let allCats = JSON.parse(data);
-                allCats.push({ id: cats.length + 1, ...fields, image: files.upload.name });
+                allCats.push({ ...fields, id: cats.length + 1, image: files.upload.name });
                 let json = JSON.stringify(allCats);
                 fs.writeFile('./data/cats.json', json, () => {
                     res.writeHead(200, { localehost: '/' });
