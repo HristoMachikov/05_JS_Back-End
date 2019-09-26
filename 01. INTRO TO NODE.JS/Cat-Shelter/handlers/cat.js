@@ -13,6 +13,7 @@ module.exports = (req, res) => {
         let filePath = path.normalize(path.join(__dirname, '../views/addCat.html'));
         const index = fs.createReadStream(filePath);
         index.on('data', (data) => {
+            console.log(breeds);
             let catBreedPlaceholder = breeds.map((breed) => `<option value="${breed}">${breed}</option>`);
             let modifiedData = data.toString().replace('{{catBreeds}}', catBreedPlaceholder.join('\n'));
             res.write(modifiedData);
@@ -88,7 +89,7 @@ module.exports = (req, res) => {
                 let json = JSON.stringify(allCats);
                 fs.writeFile('./data/cats.json', json, () => {
                     res.writeHead(302, { location: '/' });
-                    // res.redirect("/");
+                   
                     res.end();
                 });
             });
@@ -98,7 +99,8 @@ module.exports = (req, res) => {
         const index = fs.createReadStream(filePath);
         index.on('data', (data) => {
             let catId = req.url.split('/')[2];
-            let currentCat = cats.filter((cat) => cat.id === catId);
+
+            let currentCat = cats.filter((cat) => cat.id === +catId)[0];
             let modifiedData = data.toString().replace('{{id}}', catId);
             modifiedData = modifiedData.replace('{{name}}', currentCat.name);
             modifiedData = modifiedData.replace('{{description}}', currentCat.description);
@@ -121,13 +123,17 @@ module.exports = (req, res) => {
         const index = fs.createReadStream(filePath);
         index.on('data', (data) => {
             let catId = req.url.split('/')[2];
-            let currentCat = cats.filter((cat) => cat.id === catId);
-            let currentImg = path.join('./content/images/' + currentCat.image);
+
+            let currentCat = cats.filter((cat) => cat.id === +catId)[0];
+            let currentImg = path.join('../content/images/' + currentCat.image);
             let modifiedData = data.toString().replace('{{id}}', catId);
-            modifiedData = modifiedData.replace('{{image}}', currentImg);
-            modifiedData = modifiedData.replace('{{name}}', currentCat.name);
-            modifiedData = modifiedData.replace('{{description}}', currentCat.description);
-            modifiedData = modifiedData.replace('{{breed}}', currentCat.breed);
+            modifiedData = modifiedData
+                .replace('{{image}}', currentImg)
+                .replace('{{name}}', currentCat.name)
+                .replace('{{name}}', currentCat.name)
+                .replace('{{description}}', currentCat.description)
+                .replace('{{breed}}', currentCat.breed)
+                .replace('{{breed}}', currentCat.breed);
             res.write(modifiedData);
         });
 
@@ -151,15 +157,17 @@ module.exports = (req, res) => {
                 if (err) throw err;
                 let allCats = JSON.parse(data);
                 let catId = req.url.split('/')[2];
-                let editedCats = allCats.forEach((item, index, arr) => {
-                    if (index === +catId) {
+                allCats.forEach((item, index, arr) => {
+                    if (index === +catId - 1) {
+                        fields.id =  +catId;
+                        fields.image = arr[index].image;
+                        console.log(fields)
                         arr[index] = { ...fields };
                     }
                 });
-                let json = JSON.stringify(editedCats);
+                let json = JSON.stringify(allCats);
                 fs.writeFile('./data/cats.json', json, () => {
                     res.writeHead(302, { location: '/' });
-                    // res.redirect("/");
                     res.end();
                 });
             });
@@ -171,11 +179,10 @@ module.exports = (req, res) => {
             if (err) throw err;
             let allCats = JSON.parse(data);
             let catId = req.url.split('/')[2];
-            let remainCats = allCats.filter((cat) => cat.id !== catId);
+            let remainCats = allCats.filter((cat) => cat.id !== +catId);
             let json = JSON.stringify(remainCats);
             fs.writeFile('./data/cats.json', json, () => {
                 res.writeHead(302, { location: '/' });
-                // res.redirect("/");
                 res.end();
             });
         });

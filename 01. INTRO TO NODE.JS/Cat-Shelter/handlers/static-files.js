@@ -2,7 +2,8 @@ const url = require('url');
 const fs = require('fs');
 const path = require('path');
 
-function getContentType(url) {
+function getContentType(inputUrl) {
+    let url = inputUrl.toLowerCase();
     if (url.endsWith('css')) {
         return 'text/css';
     } else if (url.endsWith('js')) {
@@ -16,7 +17,7 @@ function getContentType(url) {
     } else if (url.endsWith('bmp')) {
         return 'image/bmp';
     } else if (url.endsWith('png')) {
-        return 'image/png';
+        return 'image/apng';
     } else if (url.endsWith('ttf')) {
         return 'image/ttf';
     } else if (url.endsWith('pdf')) {
@@ -34,7 +35,8 @@ module.exports = (req, res) => {
         if (pathname.endsWith('png') 
         || pathname.endsWith('jpeg') 
         || pathname.endsWith('jpg')
-        || pathname.endsWith('ico')) {
+        || pathname.endsWith('ico')
+        || pathname.endsWith('JPG')) {
 
             fs.readFile(`./${pathname}`, (err, data) => {
                 if (err) {

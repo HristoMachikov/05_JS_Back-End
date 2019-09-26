@@ -10,7 +10,6 @@ module.exports = function (req, res) {
 
     if (pathname === '/' && req.method === 'GET') {
         let filePath = path.normalize(path.join(__dirname, '../views/home/index.html'));
-        console.log(__dirname);
         fs.readFile(filePath, function (err, data) {
             if (err) {
                 console.log(err);
@@ -23,7 +22,7 @@ module.exports = function (req, res) {
             }
 
             let modifiedCats = cats.map((cat) => `<li>
-                <img src="${path.join('./content/images/' + cat.image)}" alt="${cat.name}">
+                <img src="${path.join('../content/images/' + cat.image)}" alt="${cat.name}">
                     <h3>${cat.name}</h3>
                     <p><span>Breed: </span>${cat.breed}</p>
                     <p><span>Description: </span>${cat.description}</p>
@@ -32,8 +31,7 @@ module.exports = function (req, res) {
                         <li class="btn delete"><a href="/cats-find-new-home/${cat.id}">New Home</a></li>
                     </ul>
             </li>`);
-            let modifiedData = data.toString().replace('{{cats}}', modifiedCats);
-
+            let modifiedData = data.toString().replace('{{cats}}', modifiedCats.join('\n'));
             res.writeHead(200, {
                 'Content-Type': 'text/html'
             });
