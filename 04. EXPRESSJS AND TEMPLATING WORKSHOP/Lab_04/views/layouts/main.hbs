@@ -20,9 +20,9 @@
         </header>
         <main>
             
-            {{#if globalError}}
-                <span class="error">{{globalError}}</span>
-            {{/if}}
+            {{#each globalErrors}}
+                <span class="error">{{this}}</span>
+            {{/each}}
 
             {{{body}}}
         </main>

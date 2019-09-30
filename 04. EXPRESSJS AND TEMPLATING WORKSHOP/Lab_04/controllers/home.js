@@ -6,7 +6,7 @@ module.exports = {
         const findFn = item => {
             let result = true;
             if (search) {
-                result = item.name.toLowerCase().includes(search);
+                result = item.name.toLowerCase().includes(search.toLowerCase());
             }
             if (result && from) {
                 result = +item.difficulty >= +from;

@@ -17,11 +17,19 @@ function createPost(req, res) {
     const { name = null, description = null, imageUrl = null, difficulty = null } = req.body;
     // const cubeBody = req.body;
     // cubeBody.difficulty = Number(cubeBody.difficulty);
+
+    // Validate here - name, description, imageUrl, difficulty
+    // let errorsArr = [];
+    // if (errorsArr.length > 0) {
+    //     res.local.globalErrors = errors;
+    // }
+
     const newCube = cubeModel.create(name, description, imageUrl, difficulty);
     cubeModel.insert(newCube)
         .then(() => {
             res.redirect('/');
-        });
+        })
+        .catch((e) => handleErrors(e, res, cubeBody));
 
 }
 
@@ -39,8 +47,18 @@ function details(req, res, next) {
         .catch(next);
 }
 
+function handleErrors(err, res, cubeBody) {
+    let errorsArr = [];
+    for (const prop in err.errors) {
+        errorsArr.push(err.errors[prop].message);
+    }
+    res.local.globalErrors = errors;
+    res.render('cube/create', cubeBody);
+}
+
 module.exports = {
     createGet,
     createPost,
-    details
+    details,
+    handleErrors
 }
