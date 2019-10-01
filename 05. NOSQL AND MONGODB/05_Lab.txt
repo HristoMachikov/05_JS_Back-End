@@ -1,0 +1,8 @@
+git push origin master
+
+mongo
+show dbs
+use colection
+db.mycol.insert({})
+
+mongoosejs.com
