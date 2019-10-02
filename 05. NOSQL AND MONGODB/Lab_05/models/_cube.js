@@ -95,7 +95,7 @@ class CubeModel {
     }
 
     getOne(id) {
-        return this.find(({ id: i }) => i === id).then(res => res[0] || null);
+        return this.find(({ id: i }) => i === id)[0] || null;
     }
 
     getAll() {
