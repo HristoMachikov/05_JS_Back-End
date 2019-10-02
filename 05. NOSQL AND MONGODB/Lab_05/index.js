@@ -1,27 +1,36 @@
-// const env = process.env.NODE_ENV || 'development';
-// global.__basedir = __dirname;
-// const config = require('./config/config')[env];
-// const app = require('express')();
 
-// require('./config/express')(app);
-// require('./config/routes')(app);
+global.__basedir = __dirname;
 
-// app.listen(config.port, console.log(`Listening on port ${config.port}! Now its up to you...`));
+const dbConnector = require('./config/db');
+dbConnector().then(() => {
+    const config = require('./config/config');
+    const app = require('express')();
 
-const mongodb = require('mongodb');
-const MongoClient = mongodb.MongoClient;
-const connectionStr = 'mongodb://localhost:27017';
-const client = new MongoClient(connectionStr);
-client.connect(function (err, client) {
-    if (err) {
-        console.error(err);
-        return;
-    }
-    const db = client.db('testdb');
-    const users = db.collection('users');
+    require('./config/express')(app);
+    require('./config/routes')(app);
 
-    users.deleteMany({ name: 'Pavel' }).then(deleteEntity =>
-        console.log(deleteEntity));
-    // users.insert({ name: 'Pavel' }).then(user =>
-    //     console.log(user));
-});
+    app.listen(config.port, console.log(`Listening on port ${config.port}!`));
+
+}).catch(console.error);
+
+
+// const mongodb = require('mongodb');
+// const MongoClient = mongodb.MongoClient;
+// const connectionStr = 'mongodb://localhost:27017';
+// const client = new MongoClient(connectionStr);
+// client.connect(function (err, client) {
+//     if (err) {
+//         console.error(err);
+//         return;
+//     }
+//     const db = client.db('testdb');
+//     const users = db.collection('users');
+
+//     users.insert({ name: 'Pavel' }).then(qr => {
+//         console.log(qr);
+
+//         users.deleteMany({ name: 'Pavel' }).then(qr => {
+//             console.log(qr.result);
+//         });
+//     });
+// });
