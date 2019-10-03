@@ -5,6 +5,8 @@ const cubeController = require('../controllers/cube');
 
 module.exports = (app) => {
     app.get('/details/:id', cubeController.details);
+    app.get('/edit/:id', cubeController.editGet);
+    app.post('/edit/:id', cubeController.editPost);
     app.get('/create', cubeController.createGet);
     app.post('/create', cubeController.createPost);
     app.get('/not-found', homeController.notFound);

@@ -1,7 +1,7 @@
 
 global.__basedir = __dirname;
 
-const dbConnector = require('./config/db');
+const dbConnector = require('./config/database');
 dbConnector().then(() => {
     const config = require('./config/config');
     const app = require('express')();

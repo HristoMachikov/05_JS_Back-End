@@ -1,4 +1,4 @@
-const cubeModel = require('../models/cube')
+const cubeModel = require('../models/Cube')
 
 // module.exports = {
 //     createGet: function (req, res) {
@@ -14,7 +14,7 @@ function createGet(req, res) {
     res.render('cube/create');
 }
 function createPost(req, res) {
-    const { name = null, description = null, imageUrl = null, difficulty = null } = req.body;
+    let { name = null, description = null, imageUrl = null, difficulty = null } = req.body;
     // const cubeBody = req.body;
     // cubeBody.difficulty = Number(cubeBody.difficulty);
 
@@ -24,27 +24,48 @@ function createPost(req, res) {
     //     res.local.globalErrors = errors;
     // }
 
-    const newCube = cubeModel.create(name, description, imageUrl, difficulty);
-    cubeModel.insert(newCube)
-        .then(() => {
+    // const newCube = cubeModel.create(name, description, imageUrl, difficulty);
+    difficulty = Number(difficulty);
+    cubeModel.create({ name, description, imageUrl, difficulty }, (err, result) => {
+        if (err) return console.log(err);
+        console.log('Successfully added!')
+        res.redirect('/');
+    })
+}
+
+function editGet(req, res) {
+    let id = req.params.id;
+    cubeModel.findById(Object(id), function (err, cube) {
+        if (err) {
+            res.redirect('/not-found');
+            return console.log(err);
+        }
+        // console.log(`Successfully finned cube with id: ${cube._id} !`)
+        res.render('cube/edit', { cube })
+    })
+}
+function editPost(req, res) {
+    let { name = null, description = null, imageUrl = null, difficulty = null } = req.body;
+
+    difficulty = Number(difficulty);
+    cubeModel.findByIdAndUpdate(req.params.id,
+        { $set: { name, description, imageUrl, difficulty } }, (err, result) => {
+            if (err) return console.log(err);
+            console.log('Successfully edited!')
             res.redirect('/');
         })
-        .catch((e) => handleErrors(e, res, cubeBody));
-
 }
 
 function details(req, res, next) {
-    const id = +req.params.id;
-    cubeModel.getOne(id)
-        .then(cube => {
-            if (!cube) {
-                res.redirect('/not-found');
-                return;
-                // res.locals.globalError = 'Something wen wrong!';
-            }
-            res.render('cube/details', { cube });
-        })
-        .catch(next);
+    let id = req.params.id;
+    cubeModel.findById(Object(id), function (err, cube) {
+        if (err) {
+            res.redirect('/not-found');
+            return console.log(err);
+        }
+        console.log(`Successfully finned cube with id: ${cube._id} !`)
+        res.render('cube/details', { cube })
+    })
 }
 
 function handleErrors(err, res, cubeBody) {
@@ -57,6 +78,8 @@ function handleErrors(err, res, cubeBody) {
 }
 
 module.exports = {
+    editGet,
+    editPost,
     createGet,
     createPost,
     details,

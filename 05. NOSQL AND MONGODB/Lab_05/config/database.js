@@ -2,10 +2,7 @@ const config = require('./config');
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
-module.exports = config => {
-    mongoose.connect(config.dbPath, {
-        useMongoClient: true
-    })
+module.exports = () => {
     const db = mongoose.connection;
     db.once('open', err => {
         if (err) throw err;
@@ -14,4 +11,6 @@ module.exports = config => {
     db.on('error', reason => {
         console.log(reason);
     })
+    return mongoose.connect(config.dbPath)
+
 }

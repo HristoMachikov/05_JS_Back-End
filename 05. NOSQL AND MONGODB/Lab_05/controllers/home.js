@@ -1,26 +1,31 @@
-const cubeModel = require('../models/_cube')
+const cubeModel = require('../models/Cube')
 
 module.exports = {
     homeGet: (req, res, next) => {
-        const { from, to, search } = req.query;
-        const findFn = item => {
-            let result = true;
-            if (search) {
-                result = item.name.toLowerCase().includes(search.toLowerCase());
-            }
-            if (result && from) {
-                result = +item.difficulty >= +from;
-            }
-            if (result && to) {
-                result = +item.difficulty <= +to;
-            }
-            return result;
-        }
-        // cubeModel.getAll()
-        cubeModel.find(findFn)
+        // const { from, to, search } = req.query;
+        // const findFn = item => {
+        //     let result = true;
+        //     if (search) {
+        //         result = item.name.toLowerCase().includes(search.toLowerCase());
+        //     }
+        //     if (result && from) {
+        //         result = +item.difficulty >= +from;
+        //     }
+        //     if (result && to) {
+        //         result = +item.difficulty <= +to;
+        //     }
+        //     return result;
+        // }
+
+        cubeModel.find()
             .then(cubes => {
                 res.locals.globalError = 'Something wen wrong!';
-                res.render('index', { cubes, search, from, to });
+                res.render('index', {
+                    cubes,
+                    // search,
+                    // from,
+                    // to
+                });
             })
             .catch(next);
 
