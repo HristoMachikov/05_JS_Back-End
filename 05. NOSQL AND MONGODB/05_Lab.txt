@@ -6,3 +6,8 @@ use colection
 db.mycol.insert({})
 
 mongoosejs.com
+
+db.collection.drop()
+db.collection.find().pretty()
+$nin
+$push

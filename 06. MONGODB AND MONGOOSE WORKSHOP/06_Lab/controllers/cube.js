@@ -76,7 +76,7 @@ function details(req, res, next) {
             return;
         }
         console.log(`Successfully finned cube with id: ${cube._id} !`)
-        res.render('cube/details', { cube })
+        res.render('cube/details', cube)
     })
 }
 

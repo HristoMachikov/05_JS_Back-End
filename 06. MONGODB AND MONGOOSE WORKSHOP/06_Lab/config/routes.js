@@ -5,7 +5,8 @@ const accessoaryController = require('../controllers/accessoary');
 
 
 module.exports = (app) => {
-    // app.get('/attach/accessory/:id', accessoaryController.attachAccessory);
+    app.get('/attach/accessory/:id', accessoaryController.attachAccessoryGet);
+    app.post('/attach/accessory/:id', accessoaryController.attachAccessoryPost);
     app.get('/create/accessory', accessoaryController.createAccessoryGet);
     app.post('/create/accessory', accessoaryController.createAccessoryPost);
     
