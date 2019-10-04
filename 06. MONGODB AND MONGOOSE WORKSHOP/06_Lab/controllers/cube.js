@@ -1,4 +1,5 @@
 const cubeModel = require('../models/Cube')
+const handleErrors = require('./index');
 
 // module.exports = {
 //     createGet: function (req, res) {
@@ -79,20 +80,10 @@ function details(req, res, next) {
     })
 }
 
-function handleErrors(err, res, cubeBody) {
-    let errorsArr = [];
-    for (const prop in err.errors) {
-        errorsArr.push(err.errors[prop].message);
-    }
-    res.locals.globalErrors = errorsArr;
-    // res.render('cube/create', cubeBody);
-}
-
 module.exports = {
     editGet,
     editPost,
     createGet,
     createPost,
-    details,
-    handleErrors
+    details
 }
