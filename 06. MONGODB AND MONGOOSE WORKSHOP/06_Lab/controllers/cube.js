@@ -69,14 +69,12 @@ function editPost(req, res) {
 
 function details(req, res, next) {
     let id = req.params.id;
-    cubeModel.findById(Object(id), function (err, cube) {
-        if (err) {
-            handleErrors(err, res);
-            res.redirect('/not-found');
-            return;
-        }
-        console.log(`Successfully finned cube with id: ${cube._id} !`)
+    cubeModel.findById(Object(id)).populate('accessoaries').then(cube => {
+        // if (!cube) { res.redirect('/not-found'); return; }
+        // console.log(`Successfully finded cube with id: ${cube._id} !`)
         res.render('cube/details', cube)
+    }).catch(err => {
+        handleErrors(err, res);
     })
 }
 

@@ -5,10 +5,11 @@ const accessoaryController = require('../controllers/accessoary');
 
 
 module.exports = (app) => {
-    app.get('/attach/accessory/:id', accessoaryController.attachAccessoryGet);
-    app.post('/attach/accessory/:id', accessoaryController.attachAccessoryPost);
-    app.get('/create/accessory', accessoaryController.createAccessoryGet);
-    app.post('/create/accessory', accessoaryController.createAccessoryPost);
+    
+    app.get('/create/accessoary', accessoaryController.createAccessoaryGet);
+    app.post('/create/accessoary', accessoaryController.createAccessoaryPost);
+    app.get('/attach/accessoary/:id', accessoaryController.attachAccessoaryGet);
+    app.post('/attach/accessoary/:id', accessoaryController.attachAccessoaryPost);
     
     app.get('/details/:id', cubeController.details);
     app.get('/edit/:id', cubeController.editGet);
