@@ -5,6 +5,7 @@ const cubeModel = require('../models/Cube')
 function createAccessoaryGet(req, res) {
     res.render('accessoary/createAccessoary');
 }
+
 function createAccessoaryPost(req, res) {
     let { name = null, description = null, imageUrl = null } = req.body;
 
@@ -24,7 +25,7 @@ function attachAccessoaryGet(req, res, next) {
     let cubeId = req.params.id;
     cubeModel.findById(cubeId).then(cube => {
         Promise.all([cube, Accessoary.find({ cubes: { $nin: cubeId } })]).then(([cube, filtredAccessoaries]) => {
-            console.log(filtredAccessoaries);
+            // console.log(filtredAccessoaries);
             res.render('accessoary/attachAccessoary', {
                 cube,
                 accessoaries: filtredAccessoaries.length > 0 ? filtredAccessoaries : null
@@ -36,6 +37,7 @@ function attachAccessoaryGet(req, res, next) {
         handleErrors(err, res);
     })
 }
+
 function attachAccessoaryPost(req, res, next) {
     const { accessoary: accessoaryId } = req.body;
     const { id: id } = req.params;

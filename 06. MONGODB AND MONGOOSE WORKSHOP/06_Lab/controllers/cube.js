@@ -1,40 +1,39 @@
 const cubeModel = require('../models/Cube')
-const handleErrors = require('./index');
+const { handleErrors } = require('./index');
+const { difficultyLevels } = require('./index');
 
-// module.exports = {
-//     createGet: function (req, res) {
-//         res.render('cube/create');
-//     },
-//     createPost: function (req, res) {
-//         const cubeBody = req.body;
-//         console.log(cubeBody);
-//         res.redirect('/');
-//     }
-// }
-function createGet(req, res) {
-    res.render('cube/create');
+function addSeclectedAttribute(inputArr, cube) {
+    inputArr
+        .forEach(function (elem, idx, arr) {
+            if (arr[idx].selected) {
+                delete arr[idx].selected
+            }
+            if (elem.level === +cube.difficulty) {
+                arr[idx].selected = "selected";
+            }
+        });
+    return inputArr;
 }
+
+function createGet(req, res) {
+    let cube = {};
+    cube.difficultyLevels = difficultyLevels;
+    res.render('cube/create', cube);
+}
+
 function createPost(req, res) {
     let { name = null, description = null, imageUrl = null, difficulty = null } = req.body;
-    // const cubeBody = req.body;
-    // cubeBody.difficulty = Number(cubeBody.difficulty);
 
-    // Validate here - name, description, imageUrl, difficulty
-    // let errorsArr = [];
-    // if (errorsArr.length > 0) {
-    //     res.local.globalErrors = errors;
-    // }
-
-    // const newCube = cubeModel.create(name, description, imageUrl, difficulty);
     difficulty = Number(difficulty);
     const cubeBody = { name, description, imageUrl, difficulty };
     cubeModel.create(cubeBody, (err, result) => {
         if (err) {
             handleErrors(err, res);
+            cubeBody.difficultyLevels = addSeclectedAttribute(difficultyLevels, cubeBody);
             res.render('cube/create', cubeBody);
             return;
         }
-        console.log('Successfully added!')
+        console.log('Successfully added!');
         res.redirect('/');
     })
 }
@@ -47,10 +46,11 @@ function editGet(req, res) {
             // res.redirect('/not-found');
             return;
         }
-        // console.log(`Successfully finned cube with id: ${cube._id} !`)
-        res.render('cube/edit', { cube })
+        cube.difficultyLevels = addSeclectedAttribute(difficultyLevels, cube);
+        res.render('cube/edit', { cube });
     })
 }
+
 function editPost(req, res) {
     let { name = null, description = null, imageUrl = null, difficulty = null } = req.body;
 
@@ -59,9 +59,9 @@ function editPost(req, res) {
         { $set: { name, description, imageUrl, difficulty } }, (err, result) => {
             if (err) {
                 handleErrors(err, res);
-                // res.render('cube/create', cubeBody);
                 return;
             }
+            // DeprecationWarning: Mongoose: `findOneAndUpdate()` and `findOneAndDelete()` without the `useFindAndModify` option set to false are deprecated. See: https://mongoosejs.com/docs/deprecations.html#-findandmodify-
             console.log('Successfully edited!')
             res.redirect('/');
         })
@@ -70,9 +70,8 @@ function editPost(req, res) {
 function details(req, res, next) {
     let id = req.params.id;
     cubeModel.findById(Object(id)).populate('accessoaries').then(cube => {
-        // if (!cube) { res.redirect('/not-found'); return; }
-        // console.log(`Successfully finded cube with id: ${cube._id} !`)
-        res.render('cube/details', cube)
+
+        res.render('cube/details', cube);
     }).catch(err => {
         handleErrors(err, res);
     })

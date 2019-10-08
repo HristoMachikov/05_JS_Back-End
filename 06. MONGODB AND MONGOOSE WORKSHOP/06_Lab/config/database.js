@@ -12,6 +12,6 @@ module.exports = () => {
     db.on('error', reason => {
         console.log(reason);
     })
-    return mongoose.connect(config.dbPath)
+    return mongoose.connect(config.dbPath, { useFindAndModify: false })
 
 }
