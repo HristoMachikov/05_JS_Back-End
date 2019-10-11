@@ -3,6 +3,7 @@ const homeController = require('../controllers/home');
 const cubeController = require('../controllers/cube');
 const userController = require('../controllers/user');
 const accessoaryController = require('../controllers/accessoary');
+const restrictedPages = require('./auth');
 
 module.exports = (app) => {
     app.get('/create/accessoary', accessoaryController.createAccessoaryGet);
@@ -18,13 +19,14 @@ module.exports = (app) => {
     app.get('/create', cubeController.createGet);
     app.post('/create', cubeController.createPost);
 
-    app.get('/login', userController.loginGet);
-    app.post('/login', userController.loginPost);
-    app.get('/register', userController.registerGet);
-    app.post('/register', userController.registerPost);
+    app.get('/user/login', restrictedPages.isAnonymous, userController.loginGet);
+    app.post('/user/login', restrictedPages.isAnonymous, userController.loginPost);
+    app.get('/user/register', restrictedPages.isAnonymous, userController.registerGet);
+    app.post('/user/register', restrictedPages.isAnonymous, userController.registerPost);
+    app.post('/user/logout', restrictedPages.isAnonymous, userController.logoutPost);
 
-    app.get('/not-found', homeController.notFound);
     app.get('/about', homeController.about);
     app.get('/search', homeController.search);
     app.get('/', homeController.homeGet);
+    app.all('*', homeController.notFound);
 };
