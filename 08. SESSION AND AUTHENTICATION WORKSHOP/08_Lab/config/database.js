@@ -21,7 +21,7 @@ module.exports = () => {
         console.log(reason);
     })
     return mongoose.connect(config.dbPath, {
-        // useFindAndModify: false,
+        useFindAndModify: false,
         useNewUrlParser: true
     })
 

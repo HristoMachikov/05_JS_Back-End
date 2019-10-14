@@ -15,11 +15,7 @@ module.exports = (app) => {
     app.set('view engine', '.hbs');
 
     //TODO: Setup the body parser
-    app.use(bodyParser.urlencoded({ extended: false }));
-
-    //TODO: Setup the static files
-    app.use(express.static('static'));
-    // app.use(express.static(path.resolve(__basedir + 'static')));
+    app.use(bodyParser.urlencoded({ extended: true }));
 
     //TODO: Setup the cookie parser
     app.use(cookieParser());
@@ -49,4 +45,8 @@ module.exports = (app) => {
         }
         next();
     });
+
+    //TODO: Setup the static files
+    app.use(express.static('static'));
+    // app.use(express.static(path.resolve(__basedir + 'static')));
 };

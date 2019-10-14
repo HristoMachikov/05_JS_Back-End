@@ -1,7 +1,7 @@
-const bcrypt = require('bcrypt');
-// const crypto = require('crypto');
+// const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 
-const saltRounds = 9;
+// const saltRounds = 9;
 
 // bcrypt.genSalt(saltRounds, (err, salt) => {
 //     bcrypt.hash(password, salt, (err, hash) => {
@@ -16,9 +16,9 @@ const saltRounds = 9;
 
 module.exports = {
     generateSalt: () =>
-        bcrypt.genSalt(saltRounds),
-    // crypto.randomBytes(128).toString('base64'),
+        // bcrypt.genSalt(saltRounds),
+    crypto.randomBytes(128).toString('base64'),
     generateHashedPassword: (salt, password) =>
-        bcrypt.hash(password, salt)
-    // crypto.createHmac('sha256', salt).update(password).digest('hex')
+        // bcrypt.hash(password, salt)
+    crypto.createHmac('sha256', salt).update(password).digest('hex')
 };
