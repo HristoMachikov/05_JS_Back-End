@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const encryption = require('../util/encryption');
+const { handleErrors } = require('./index');
 
 function loginGet(req, res) {
     res.render('user/login');
@@ -9,7 +10,9 @@ async function loginPost(req, res) {
     try {
         const user = await User.findOne({ username: userBody.username });
         if (!user) {
-            userBody.error = "Username is invalid!"
+            // userBody.error = "Username is invalid!"
+            const error = "Username is invalid!"
+            handleErrors(error, res);
             res.render('user/login', userBody);
             return;
         }
@@ -18,9 +21,10 @@ async function loginPost(req, res) {
             res.render('user/login', userBody);
             return;
         }
-        req.login(user, (err) => {
+        req.logIn(user, (err) => {
             if (err) {
                 req.userBody.error = err;
+                handleErrors(err, res);
                 res.render('user/login', userBody);
             } else {
                 res.redirect('/');
@@ -43,7 +47,9 @@ async function registerPost(req, res) {
         return;
     }
     if (userBody.password !== userBody.repeatPassword) {
-        userBody.error = "Both passwords should match!";
+        const error = "Both passwords should match!"
+        handleErrors(error, res);
+        // userBody.error = "Both passwords should match!";
         res.render('user/register', userBody);
         return;
     }
@@ -58,7 +64,7 @@ async function registerPost(req, res) {
             salt,
             roles: ['User']
         });
-        req.login(user, (err) => {
+        req.logIn(user, (err) => {
             if (err) {
                 req.userBody.error = err;
                 res.render('user/register', userBody);
