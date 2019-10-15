@@ -12,7 +12,8 @@ function loginPost(req, res, next) {
     const { username, password } = req.body;
     let userBody = { username, password };
     User.findOne({ username })
-        .then((user) => Promise.all([user, user.matchPassword(password)]))
+        // .then((user) => Promise.all([user, user.matchPassword(password)]))
+        .then((user) => Promise.all([user, user ? user.matchPassword(password) : false]))
         .then(([user, match]) => {
             if (!match) {
                 const error = "Wrong password or username!";
@@ -24,7 +25,7 @@ function loginPost(req, res, next) {
             res.cookie(userCookieName, token);
             res.redirect('/');
         })
-   
+
 }
 function registerGet(req, res) {
     res.render('user/register');

@@ -37,7 +37,7 @@ function createPost(req, res) {
             handleErrors(err, res);
             cube.options = options(cube);
             // cube.difficultyLevels = addSeclectedAttribute(difficultyLevels, cube);
-            res.render('cube/create', {cube, user});
+            res.render('cube/create', { cube, user });
             return;
         }
         console.log('Successfully added!');
@@ -65,7 +65,8 @@ function editPost(req, res) {
 
     difficulty = Number(difficulty);
     cubeModel.findByIdAndUpdate(req.params.id,
-        { $set: { name, description, imageUrl, difficulty } }, (err, result) => {
+        // { $set: { name, description, imageUrl, difficulty } }, (err, result) => {
+        { $set: { name, description, imageUrl, difficulty } }, { runValidators: true }, (err, result) => {
             if (err) {
                 handleErrors(err, res);
                 return;
@@ -112,7 +113,7 @@ function details(req, res, next) {
     const { user } = req;
     cubeModel.findById(Object(id)).populate('accessoaries').then(cube => {
         cube.isCreator = cube.creatorId === user.id;
-        res.render('cube/details', {cube, user});
+        res.render('cube/details', { cube, user });
     }).catch(err => {
         handleErrors(err, res);
     })
