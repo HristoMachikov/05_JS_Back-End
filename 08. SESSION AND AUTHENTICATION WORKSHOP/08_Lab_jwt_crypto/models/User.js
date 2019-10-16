@@ -1,41 +1,26 @@
 const { Schema, model } = require('mongoose');
-const encryption = require('../util/encryption');
-const bcrypt = require('bcrypt');
-// const crypto = require('crypto');
-const saltRounds = 9;
+const encryption = require('../utils/encryption');
 
 const userSchema = new Schema({
     username: { type: Schema.Types.String, required: true, unique: true },
     password: { type: Schema.Types.String, required: true },
-    // salt: { type: Schema.Types.String, required: true },
+    salt: { type: Schema.Types.String },
     // roles: [{ type: Schema.Types.String }]
 })
+
 userSchema.methods = {
     matchPassword: function (password) {
-        return bcrypt.compare(password, this.password);
+        return encryption.generateHashedPassword(this.salt, password) === this.password;
     }
 }
 
 userSchema.pre('save', function (next) {
     if (this.isModified('password')) {
-        encryption.generateSalt((err, salt) => {
-            if (err) { next(err); return; }
-            encryption.generateHashedPassword(salt,this.password, (err, hash) => {
-                if (err) { next(err); return; }
-                this.password = hash;
-                next();
-            })
-        });
-       
-        // bcrypt.genSalt(saltRounds, (err, salt) => {
-        //     if (err) { next(err); return; }
-        //     bcrypt.hash(this.password, salt, (err, hash) => {
-        //         if (err) { next(err); return; }
-        //         this.password = hash;
-        //         next();
-        //     });
-        // });
-        return;
+        const salt = encryption.generateSalt()
+        const hash = encryption.generateHashedPassword(salt, this.password);
+        this.password = hash;
+        this.salt = salt;
+        next();
     }
     next();
 });
