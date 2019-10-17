@@ -1,5 +1,5 @@
 const Accessoary = require('../models/Accessoary');
-const { handleError } = require('./index');
+const { handleError,  handleErrors} = require('./index');
 const cubeModel = require('../models/Cube')
 
 function createAccessoaryGet(req, res) {
@@ -13,7 +13,7 @@ function createAccessoaryPost(req, res) {
     const accessoaryBody = { name, description, imageUrl };
     Accessoary.create(accessoaryBody, (err, result) => {
         if (err) {
-            handleError(err, res);
+            handleErrors(err, res);
             res.render('accessoary/createAccessoary', {accessoaryBody, user});
             return;
         }

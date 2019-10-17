@@ -3,7 +3,6 @@ const homeController = require('../controllers/home');
 const cubeController = require('../controllers/cube');
 const userController = require('../controllers/user');
 const accessoaryController = require('../controllers/accessoary');
-const restrictedPages = require('./auth');
 const { auth } = require('../utils');
 
 module.exports = (app) => {

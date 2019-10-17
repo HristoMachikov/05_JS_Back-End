@@ -31,10 +31,16 @@
 
             {{#each globalErrors}}
             <span class="error">{{this}}</span>
+            {{!-- <div id="notifications">
+            <p id="notification-message">{{this}}</p>
+        </div> --}}
             {{/each}}
 
             {{#if globalError}}
             <span class="error">{{globalError}}</span>
+            {{!-- <div id="notifications">
+            <p id="notification-message">{{globalError}}</p>
+        </div> --}}
             {{/if}}
 
             {{{body}}}

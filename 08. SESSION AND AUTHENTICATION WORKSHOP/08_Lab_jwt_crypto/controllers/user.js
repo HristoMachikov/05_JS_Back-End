@@ -1,7 +1,7 @@
 const User = require('../models/User');
 const TokenBlacklist = require('../models/TokenBlacklist');
 const encryption = require('../utils/encryption');
-const { handleError } = require('./index');
+const { handleError, handleErrors } = require('./index');
 const utils = require('../utils');
 const { userCookieName } = require('../app-config');
 
@@ -11,7 +11,27 @@ function loginGet(req, res) {
 function loginPost(req, res, next) {
     const { username, password } = req.body;
     let userBody = { username, password };
+    const regex = /^[a-zA-Z0-9]*[a-zA-Z0-9]$/;
+    if (!username || !password) {
+        const error = "Pleas fill all fields!";
+        handleError(error, res);
+        res.render('user/login', userBody);
+        return;
+    }
+    if (!regex.test(password) || !regex.test(username)) {
+        const error = "Password and username should consist only with English letters and digits"
+        handleError(error, res);
+        res.render('user/login', userBody);
+        return;
+    }
+    if (username.length < 4 || password.length < 4) {
+        const error = "Password and username should be at least 4 characters long"
+        handleError(error, res);
+        res.render('user/login', userBody);
+        return;
+    }
     User.findOne({ username })
+        // .then((user) => Promise.all([user, user ? user.matchPassword(password) : false]))
         .then((user) => Promise.all([user, user ? user.matchPassword(password) : false]))
         .then(([user, match]) => {
             if (!match) {
@@ -24,7 +44,10 @@ function loginPost(req, res, next) {
             res.cookie(userCookieName, token);
             res.redirect('/');
         })
-
+    // .catch((err) => {
+    //     handleErrors(err, res);
+    //     res.render('user/login', userBody);
+    // })
 }
 function registerGet(req, res) {
     res.render('user/register');
@@ -32,45 +55,31 @@ function registerGet(req, res) {
 function registerPost(req, res, next) {
     const { username, password, repeatPassword } = req.body;
     let userBody = { username, password, repeatPassword };
-    if (!username || !password || !repeatPassword) {
-        const error = "Pleas fill all fields!";
-        handleError(error, res);
-        // userBody.errors = { repeatPassword: "Pleas fill all fields!" };
-        res.render('user/register', userBody);
-        return;
-    }
+    // if (!username || !password || !repeatPassword) {
+    //     const error = "Pleas fill all fields!";
+    //     handleError(error, res);
+    //     res.render('user/register', userBody);
+    //     return;
+    // }
     if (password !== repeatPassword) {
         const error = "Both passwords should match!"
         handleError(error, res);
-        // userBody.errors = { repeatPassword: "Both passwords should match!" };
         res.render('user/register', userBody);
         return;
     }
-
-    // User.findOne({ username }).then((user) => {
-    //     if (user) {
-    //         const error = "User with this name exist!"
-    //         handleErrors(error, res);
-    //         res.render('user/register', userBody);
-    //         // res.render('user/register', {
-    //         //     userBody,
-    //         //     errors: { username: "User with this name exist!" }
-    //         // });
-    //         return;
-    //     }
-    return User.create({ username, password })
-        // })
-        .then(() => {
-            res.redirect('/user/login');
-        }).catch(err => {
-            if (err.name === 'MongoError' && err.code === 11000) {
-                const error = "User with this name exist!"
-                handleError(error, res);
-                res.render('user/register', userBody);
-                return;
-            }
-            next(err);
-        });
+    return User.create({ username, password }).then(() => {
+        res.redirect('/user/login');
+    }).catch(err => {
+        if (err.name === 'MongoError' && err.code === 11000) {
+            const error = "User with this name exist!"
+            handleError(error, res);
+            res.render('user/register', userBody);
+            return;
+        }
+        handleErrors(err, res);
+        res.render('user/register', userBody);
+        // next(err);
+    });
 }
 
 function logoutGet(req, res) {

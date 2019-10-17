@@ -1,4 +1,3 @@
-
 global.__basedir = __dirname;
 
 const dbConnector = require('./config/database');
