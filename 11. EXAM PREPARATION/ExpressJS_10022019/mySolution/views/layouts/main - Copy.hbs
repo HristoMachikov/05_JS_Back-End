@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Cubicle</title>
+    <link href="/css/site.css" type="text/css" rel="stylesheet">
+    <link rel='shortcut icon' type='image/x-icon' href='/images/favicon.png' />
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <ul>
+                <li><img class="logo" src="/images/logo.png"></li>
+                <li><a href="/">Browse</a></li>
+                <li><a href="/about">About</a></li>
+                {{#if user}}
+                <li><a href="/create">Add a Cube</a></li>
+                <li><a href="/create/accessoary">Add Accessory</a></li>
+                {{!-- {{/if}} --}}
+                {{!-- {{#if user}} --}}
+                <li><a href="/user/logout">Logout</a></li>
+                {{else}}
+                <li><a href="/user/login">Login</a></li>
+                <li><a href="/user/register">Register</a></li>
+                {{/if}}
+            </ul>
+        </header>
+        <main>
+
+            {{#each globalErrors}}
+            <span class="error">{{this}}</span>
+            {{!-- <div id="notifications">
+            <p id="notification-message">{{this}}</p>
+        </div> --}}
+            {{/each}}
+
+            {{#if globalError}}
+            <span class="error">{{globalError}}</span>
+            {{!-- <div id="notifications">
+            <p id="notification-message">{{globalError}}</p>
+        </div> --}}
+            {{/if}}
+
+            {{{body}}}
+        </main>
+    </div>
+    <footer>@Cubicle: Exercise for Express.js and Handlebars</footer>
+</body>
+
+</html>
