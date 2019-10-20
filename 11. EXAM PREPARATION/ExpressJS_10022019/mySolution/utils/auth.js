@@ -12,7 +12,7 @@ function auth(redirectUnauthenticated = true, adminOnly = false) {
         ]).then(([data, blacklistedToken]) => {
             if (blacklistedToken) { return Promise.reject(new Error('blacklisted token')); }
             // findById(id, function (err, adventure) {})
-            User.findOne({_id:data.id}, (err, user) => {
+            User.findOne({ _id: data.id }, (err, user) => {
                 if (err) console.log(err);
                 if (!user || (adminOnly && !user.isAdmin)) {
                     return Promise.reject();
