@@ -13,19 +13,20 @@ module.exports = () => {
         }
         User.seedAdmin()
             .then(() => {
-        console.log('Database ready!')
-        })
-        .catch((err) => {
-            console.log('Something went wrong!');
-            console.log(err);
-        })
+                console.log('Database ready!')
+            })
+            .catch((err) => {
+                console.log('Something went wrong!');
+                console.log(err);
+            })
     })
     db.on('error', reason => {
         console.log(reason);
     })
     return mongoose.connect(config.dbPath, {
         // useFindAndModify: false,
-        useNewUrlParser: true
+        useNewUrlParser: true,
+        useUnifiedTopology: true
     })
 
 }

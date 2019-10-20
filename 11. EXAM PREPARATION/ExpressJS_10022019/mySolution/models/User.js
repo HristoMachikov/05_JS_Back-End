@@ -18,7 +18,8 @@ const userSchema = new Schema({
 
 userSchema.methods = {
     matchPassword: function (password) {
-        return encryption.generateHashedPassword(this.salt, password) === this.password;
+        let result = encryption.generateHashedPassword(this.salt, password) === this.password
+        return result;
     }
 }
 

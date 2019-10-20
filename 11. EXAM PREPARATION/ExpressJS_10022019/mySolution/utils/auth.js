@@ -3,7 +3,7 @@ const { userCookieName } = require('../app-config');
 const User = require('../models/User');
 const TokenBlacklist = require('../models/TokenBlacklist');
 
-function auth(redirectUnauthenticated = true) {
+function auth(redirectUnauthenticated = true, adminOnly = false) {
     return function (req, res, next) {
         const token = req.cookies[userCookieName] || '';
         Promise.all([
@@ -11,7 +11,13 @@ function auth(redirectUnauthenticated = true) {
             TokenBlacklist.findOne({ token })
         ]).then(([data, blacklistedToken]) => {
             if (blacklistedToken) { return Promise.reject(new Error('blacklisted token')); }
-            User.findById(data.id).then(user => {
+            // findById(id, function (err, adventure) {})
+            User.findOne({_id:data.id}, (err, user) => {
+                if (err) console.log(err);
+                if (!user || (adminOnly && !user.isAdmin)) {
+                    return Promise.reject();
+                }
+
                 req.user = user;
                 next();
             });

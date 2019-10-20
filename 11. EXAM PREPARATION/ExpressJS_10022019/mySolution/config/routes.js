@@ -26,6 +26,6 @@ module.exports = (app) => {
 
 
     // app.get('/search', homeController.search);
-    app.get('/', auth(false), homeController.homeGet);
+    app.get('/', auth(), homeController.homeGet);
     app.all('*', homeController.notFound);
 };
