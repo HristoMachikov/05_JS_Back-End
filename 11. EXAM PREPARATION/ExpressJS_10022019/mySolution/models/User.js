@@ -1,6 +1,5 @@
 const { Schema, model } = require('mongoose');
-const { encryption } = require('../utils');
-
+const encryption = require('../utils/encryption')
 const userSchema = new Schema({
     username: {
         type: String,
@@ -25,6 +24,9 @@ userSchema.methods = {
 
 userSchema.pre('save', function (next) {
     if (this.isModified('password')) {
+        if (this.isNew && this.username === "Admin") {
+            return next();
+        }
         const salt = encryption.generateSalt()
         const hash = encryption.generateHashedPassword(salt, this.password);
         this.password = hash;

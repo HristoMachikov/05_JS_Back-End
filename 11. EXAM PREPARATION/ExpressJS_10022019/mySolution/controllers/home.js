@@ -28,7 +28,7 @@ module.exports = {
         Course.find()
             .then(courses => {
                 if (user) {
-                    user.isAdmin = user.roles.includes('Admin');
+                    // user.isAdmin = user.roles.includes('Admin');
                     if (user.isAdmin) {
                         res.render('admin/index', {
                             courses,

@@ -1,9 +1,9 @@
 const jwt = require('./jwt');
 const auth = require('./auth');
-const encryption = require('./encryption');
+// const encryption = require('./encryption');
 
 module.exports = {
     jwt,
-    auth,
-    encryption
+    // encryption,
+    auth
 };

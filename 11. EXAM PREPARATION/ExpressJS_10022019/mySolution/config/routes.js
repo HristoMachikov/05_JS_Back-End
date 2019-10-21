@@ -11,21 +11,21 @@ module.exports = (app) => {
     // app.post('/lecture/remove/:id', auth(), lectureController.deletePost);
     // app.get('/lecture/play/:id', auth(), lectureController.playGet);
 
+    app.get('/course/details/:id', auth(), courseController.details);
+    app.get('/course/edit/:id', auth(), courseController.editGet);
+    app.post('/course/edit/:id', auth(), courseController.editPost);
+    app.get('/course/create', auth(), courseController.createGet);
+    app.post('/course/create', auth(), courseController.createPost);
 
-    // app.get('/course/details/:id', auth(false), courseController.details);
-    // app.get('/course/edit/:id', auth(), courseController.editGet);
-    // app.post('/course/edit/:id', auth(), courseController.editPost);
-    // app.get('/course/create', auth(), courseController.createGet);
-    // app.post('/course/create', auth(), courseController.createPost);
+ 
 
     app.get('/user/login', userController.loginGet);
     app.post('/user/login', userController.loginPost);
     app.get('/user/register', userController.registerGet);
     app.post('/user/register', userController.registerPost);
-    app.get('/user/logout', userController.logoutGet);
-
+    app.post('/user/logout', userController.logoutPost);
 
     // app.get('/search', homeController.search);
-    app.get('/', auth(), homeController.homeGet);
+    app.get('/', auth(false), homeController.homeGet);
     app.all('*', homeController.notFound);
 };

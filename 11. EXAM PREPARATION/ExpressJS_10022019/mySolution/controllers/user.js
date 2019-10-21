@@ -2,7 +2,7 @@ const User = require('../models/User');
 const TokenBlacklist = require('../models/TokenBlacklist');
 const { handleError, handleErrors } = require('./index');
 const utils = require('../utils');
-const encryption = utils.encryption;
+const encryption = require('../utils/encryption');
 const { userCookieName } = require('../app-config');
 
 function loginGet(req, res) {
@@ -77,7 +77,7 @@ function registerPost(req, res, next) {
     });
 }
 
-function logoutGet(req, res) {
+function logoutPost(req, res) {
     const token = req.cookies[userCookieName];
     TokenBlacklist.create({ token }).then(() => {
         res.clearCookie(userCookieName).redirect('/');
@@ -89,5 +89,5 @@ module.exports = {
     loginPost,
     registerGet,
     registerPost,
-    logoutGet
+    logoutPost
 };
