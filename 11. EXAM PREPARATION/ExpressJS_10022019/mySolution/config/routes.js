@@ -6,9 +6,9 @@ const lectureController = require('../controllers/lecture');
 const { auth } = require('../utils');
 
 module.exports = (app) => {
-    // app.get('/lecture/create/:id', auth(), lectureController.createGet);
-    // app.post('/lecture/create/:id', auth(), lectureController.createPost);
-    // app.post('/lecture/remove/:id', auth(), lectureController.deletePost);
+    app.get('/lecture/create/:id', auth(), lectureController.createLectureGet);
+    app.post('/lecture/create/:id', auth(), lectureController.createLecturePost);
+    app.get('/lecture/remove/:id', auth(), lectureController.deleteLectureGet);
     // app.get('/lecture/play/:id', auth(), lectureController.playGet);
 
     app.get('/course/details/:id', auth(), courseController.details);
