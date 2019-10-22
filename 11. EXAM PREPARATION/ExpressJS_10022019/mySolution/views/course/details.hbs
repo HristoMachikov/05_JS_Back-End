@@ -9,7 +9,7 @@
         <div class="col-md-4 text-center">
             <h3 class="my-3">Course Description</h3>
             <p>{{course.description}}</p>
-            {{#if isEnrolled}}
+            {{#if course.isEnrolled}}
             <span class="badge badge-pill badge-success">enrolled</span>
             {{else}}
             <form id="enroll-form" action="/course/details/{{course._id}}" method="post"></form>

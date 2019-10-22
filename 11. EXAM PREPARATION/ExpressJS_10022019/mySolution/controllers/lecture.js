@@ -6,15 +6,6 @@ function createLectureGet(req, res) {
     const { user } = req;
     const courseId = req.params.id;
 
-    // let getCourse = new Promise(Course.findById(courseId));
-    // getCourse.then(course =>{
-    //     let lectures = new Promise(Lecture.find({ 'course': courseId }));
-    //     res.render('admin/create-lecture', { user, lectures, course });
-    // }).catch(err => {
-    //     handleErrors(err, res);
-    //     res.render('admin/create-lecture', { lecture, user });
-    // })
-
     Course.findById(courseId).then(course => {
         Promise.all([course, Lecture.find({ 'course': courseId })]).then(([course, lectures]) => {
             res.render('admin/create-lecture', { user, lectures, course });
@@ -23,7 +14,6 @@ function createLectureGet(req, res) {
         handleErrors(err, res);
         // res.render('admin/create-lecture', { lecture, user });
     })
-
 }
 
 function createLecturePost(req, res) {
@@ -42,79 +32,56 @@ function createLecturePost(req, res) {
             })
     }).catch(err => {
         handleErrors(err, res);
-        res.render('admin/create-lecture', { lecture, user });
-        return;
+
+        Course.findById(courseId).then(course => {
+            Promise.all([course, Lecture.find({ 'course': courseId })]).then(([course, lectures]) => {
+                res.render('admin/create-lecture', { user, lectures, course, lecture });
+            });
+        }).catch(err => {
+            handleErrors(err, res);
+        })
     })
 }
 
-// function attachAccessoaryGet(req, res, next) {
-//     let cubeId = req.params.id;
-//     const { user } = req;
-//     cubeModel.findById(cubeId).then(cube => {
-//         Promise.all([cube, Accessoary.find({ cubes: { $nin: cubeId } })]).then(([cube, filtredAccessoaries]) => {
-//             // console.log(filtredAccessoaries);
-//             res.render('accessoary/attachAccessoary', {
-//                 cube,
-//                 accessoaries: filtredAccessoaries.length > 0 ? filtredAccessoaries : null,
-//                 user
-//             });
-//         }).catch(err => {
-//             handleErrors(err, res);
-//         })
-//     }).catch(err => {
-//         handleErrors(err, res);
-//     })
-// }
-
-// function attachAccessoaryPost(req, res, next) {
-//     const { accessoary: accessoaryId } = req.body;
-//     const { id: id } = req.params;
-//     Promise.all([
-//         cubeModel.update({ _id: id }, { $push: { accessoaries: accessoaryId } }),
-//         Accessoary.update({ _id: accessoaryId }, { $push: { cubes: id } })
-//     ]).then(([cube, accessoary]) => {
-//         console.log('Successfully updated!')
-//         res.redirect('/');
-//     }).catch(err => {
-//         handleErrors(err, res);
-//         res.render('/');
-//         return;
-//     })
-
-// }
-
 function deleteLectureGet(req, res) {
     const lectureId = req.params.id
-    Lecture.deleteOne({ _id: lectureId }).then(lecture => {
-        // let lectureArr = new Promise(Course.findById())
-        Promise.all([lecture, Course.findById({ _id: lecture.course })]).then(([lecture, course]) => {
-            let lectureArr = course.lectures.filter(id => id !== lectureId);
-            Course.update({ _id: lecture.course }, { $set: { lectures: lectureArr } }).then(result => {
-                console.log('Successfully deleted!')
+    let lectureArr = [];
+    Lecture.findById(lectureId).then(lecture => {
+        Promise.all([lecture, Course.findById(lecture.course)]).then(([lecture, course]) => {
+            lectureArr = course.lectures.filter((id) => id.toString() !== lectureId);
+            Promise.all([Lecture.deleteOne({ _id: lectureId }), Course.update({ _id: lecture.course }, { $set: { lectures: lectureArr } })]).then(([result, updatedCourse]) => {
+                console.log('Successfully deleted lecture!')
                 res.redirect('/');
+            }).catch(err => {
+                handleErrors(err, res);
+                res.render('/');
             })
-
-
+        }).catch(err => {
+            handleErrors(err, res);
+            res.render('/');
         })
     }).catch(err => {
         handleErrors(err, res);
-        // res.render('admin/create-lecture', { lecture, user });
+        res.render('/');
     })
+}
 
-    // Lecture.deleteOne({ _id: req.params.id }, (err, result) => {
-    //     if (err) {
-    //         handleErrors(err, res);
-    //         return;
-    //     }
-    //     console.log('Successfully deleted!')
-    //     res.redirect('/');
-    // })
+function playGet(req, res) {
+    const lectureId = req.params.id
+    const { user } = req;
+    Lecture.findById(lectureId).then(lecture => {
+        Promise.all([lecture, Course.findById(lecture.course).populate('lectures')]).then(([lecture, course]) => {
+            res.render('admin/play-lecture', { lecture, course });
+        }).catch(err => {
+            handleErrors(err, res);
+            res.render('/');
+        })
+    })
 }
 
 module.exports = {
     createLectureGet,
     createLecturePost,
-    deleteLectureGet
-    // attachAccessoaryGet,
-    // attachAccessoaryPost
+    deleteLectureGet,
+    playGet
 }
