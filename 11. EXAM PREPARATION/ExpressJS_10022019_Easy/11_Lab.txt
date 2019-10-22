@@ -1,0 +1,4 @@
+в view engina се добавя пропърти:
+partialsDir:/view/partials
+
+bodyParser  да се извика преди раутовете
