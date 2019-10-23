@@ -19,9 +19,11 @@
                     <h4 class="card-title">{{this.title}}</h4>
                     <p class="card-text">{{this.description}}</p>
                 </div>
+                {{#if this.isPublic}}
                 <div class="card-footer">
                     <a href="/course/details/{{this._id}}"><button type="button" class="btn btn-info">Details</button></a>
                 </div>
+                {{/if}}
             </div>
             {{/each}}
 

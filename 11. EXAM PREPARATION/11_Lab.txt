@@ -1,0 +1,10 @@
+в view engina се добавя пропърти:
+partialsDir:/view/partials
+
+bodyParser  да се извика преди раутовете
+
+
+https://softuni.bg/trainings/2255/expressjs-fundamentals-january-2019#lesson-10723
+
+db.inventory.update( { tags: { $nin: [ "appliances", "school" ] } }, { $set: { sale: false } } )
+https://docs.mongodb.com/manual/reference/operator/query-comparison/

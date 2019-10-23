@@ -43,8 +43,14 @@ module.exports = {
                     return;
                     // cube.forEach(cube => cube.isCreator = cube.creatorId === user.id);
                 }
+
+                let topCourses = courses
+                    .filter(obj => obj.isPublic === true)
+                    .sort((a, b) => b.usersEnrolled.length - a.usersEnrolled.length)
+                    .splice(0, 3);
+
                 res.render('index', {
-                    courses,
+                    topCourses,
                     user
                 });
             })
@@ -72,7 +78,7 @@ module.exports = {
 
         let query = {};
         if (search) {
-            query = { ...query, title: { $regex: search } };
+            query = { ...query, title: { $regex: search, $options: 'i' } };
             //  name: `/${search}/i` ???
             // name: { $regex: search }
         }
