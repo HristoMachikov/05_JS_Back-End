@@ -34,7 +34,7 @@ const userSchema = new Schema({
         //     message: props => `password should be at least 5 characters long!`
         // }]
     },
-    articles: [{ type: Schema.Types.String, ref: 'Article' }],
+    articles: [{ type: Schema.Types.ObjectId, ref: 'Article' }],
     salt: { type: Schema.Types.String }
     // roles: [{ type: Schema.Types.String }]
 })

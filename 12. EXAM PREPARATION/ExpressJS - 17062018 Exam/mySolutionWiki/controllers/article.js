@@ -15,18 +15,21 @@ function createPost(req, res) {
     const article = { title, description };
 
 
-    const dateNow = new Date();
-    article.createdAt = dateNow.toDateString();
-    article.authorId = user.id;
-    Article.create(article, (err, result) => {
-        if (err) {
-            handleErrors(err, res);
-            // cube.options = options(cube);
-            res.render('article/create', { article, user });
-            return;
-        }
-        console.log('Successfully added!');
-        res.redirect('/');
+    // const dateNow = new Date();
+    // article.createdAt = dateNow.toDateString();
+    article.authorId = user._id;
+    Article.create(article).then(result => {
+        console.log(result);
+        let articlesArr = user.articles.push(result._id);
+        User.updateOne({ _id: user._id }, { $set: { articles: articlesArr } }).then(updated => {
+            console.log('Successfully added!');
+            res.redirect('/');
+        })
+    }).catch(err => {
+        handleErrors(err, res);
+        // cube.options = options(cube);
+        res.render('article/create', { article, user });
+        return;
     })
 }
 
@@ -103,7 +106,7 @@ function detailsGet(req, res, next) {
 function allGet(req, res, next) {
     let articleId = req.params.id;
     const { user } = req;
-    Article.find().then(articles => {
+    Article.find().select('title').then(articles => {
         res.render('article/article-all', { articles, user });
     }).catch(err => {
         handleErrors(err, res);

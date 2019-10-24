@@ -11,10 +11,11 @@ const articleSchema = new Schema({
         required: [true, 'Description required']
     },
     createdAt: {
-        type: Schema.Types.String,
+        type: Schema.Types.Date,
+        default: Date.now
     },
     // usersEnrolled: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-    authorId: { type: Schema.Types.String }
+    authorId: { type: Schema.Types.ObjectId, ref: 'User' }
 });
 
 articleSchema.path('title').validate(function (v) {

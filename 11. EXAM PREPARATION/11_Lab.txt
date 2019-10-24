@@ -8,3 +8,5 @@ https://softuni.bg/trainings/2255/expressjs-fundamentals-january-2019#lesson-107
 
 db.inventory.update( { tags: { $nin: [ "appliances", "school" ] } }, { $set: { sale: false } } )
 https://docs.mongodb.com/manual/reference/operator/query-comparison/
+
+auth(false) - false означава да не редиректва

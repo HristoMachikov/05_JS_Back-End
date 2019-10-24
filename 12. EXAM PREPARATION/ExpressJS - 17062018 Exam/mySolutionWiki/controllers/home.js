@@ -22,7 +22,12 @@ module.exports = {
     homeGet: (req, res, next) => {
         const { user } = req;  
         Article.find()
-            .then(articles => {
+        // .sort("-createdAt")
+        // .limit(3)
+            .then(articles => { 
+
+                // articles.forEach(a=> a.description.split(' ').splice(0,50).join(' '))
+
                 // if (user) {  
                 //     // if (user.isAdmin) {
                 //     //     res.render('admin/index', {
