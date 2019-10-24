@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Wiki</title>
+    <link href="/css/site.css" type="text/css" rel="stylesheet">
+    <link rel='shortcut icon' type='image/x-icon' href='/images/logo.png' />
+</head>
+
+<body>
+    <div>
+        <aside>
+            <div class="center">
+                <img class="logo" src="/images/logo.png" alt="logo">
+            </div>
+
+            <nav>
+                <a href="/">Main Page</a>
+                <a href="/article/all">All Articles</a>
+                <form action="/search" method="GET">
+                    <input type="text">
+                    <input type="submit" value="Search" name="search">
+                </form>
+                {{#if user}}
+                <a href="/article/create">Create New Article</a>
+                {{/if}}
+            </nav>
+        </aside>
+        <div id="container">
+            <header>
+                {{#if user}}
+                <span>Welcome, {{user.username}}!</span>
+                <a href="/user/logout">[Logout]</a>
+                {{else}}
+                <a href="/user/login">Login</a>
+                <a href="/user/register">Register</a>
+                {{/if}}
+            </header>
+            <main>
+                <h1>Welcome to SoftUni Wiki!</h1>
+                {{#each globalErrors}}
+                <span class="error">{{this}}</span>
+                {{/each}}
+
+                {{#if globalError}}
+                <span class="error">{{globalError}}</span>
+                {{/if}}
+                {{{body}}}
+            </main>
+            <footer>
+                SoftUni Wiki &copy; 2018 - 2019
+            </footer>
+        </div>
+    </div>
+</body>
+
+</html>
+
+
+
+
+
+
+
+{{!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Express Retake Exam January 2019</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="/css/site.css" type="text/css" rel="stylesheet">
+    <link rel='shortcut icon' type='image/x-icon' href='/images/favicon.ico' />
+    
+</head>
+
+<body>
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand">Video Tutorials</a>
+
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home </a>
+                </li>
+                {{#if user}}
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Welcome, {{user.username}}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/logout">Logout</a>
+                </li>
+                {{else}}
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/login">Login</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/register">Register</a>
+                </li>
+                {{/if}}
+            </ul>
+        </nav>
+
+        {{!-- <section class="notifications">
+            <p class="notification-message">Message...</p>
+        </section> --}}
+
+<main>
+    {{#each globalErrors}}
+    <span class="error">{{this}}</span>
+    {{/each}}
+
+    {{#if globalError}}
+    <span class="error">{{globalError}}</span>
+    {{/if}}
+    {{{body}}}
+</main>
+
+<footer class="page-footer font-small">
+    <div class="footer-copyright text-center py-3">© 2019
+        <a href="https://softuni.bg/trainings/2255/expressjs-fundamentals-january-2019">Express Fundamentals</a>
+    </div>
+</footer>
+
+</div>
+</body>
+
+</html> --}}

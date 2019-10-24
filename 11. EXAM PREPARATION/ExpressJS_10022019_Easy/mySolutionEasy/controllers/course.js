@@ -60,17 +60,53 @@ function editPost(req, res) {
 }
 
 function deleteGet(req, res) {
-    const courseId = req.params.id
+    const courseId = req.params.id;
     let usersEnrolledArr = [];
 
-    // User.update({ courses: { $in: [ courseId ] }} ,{ $set: { courses: this.courses.filter((id) => id.toString() !== courseId) }}).then((users))
-    Course.deleteOne({ _id: courseId }).then(result => {
-        res.redirect('/');
-    }).catch(err => {
-        handleErrors(err, res);
-        res.render('/');
-    });
+    // // User.update({ courses: { $in: [ courseId ] }} ,{ $set: { courses: this.courses.filter((id) => id.toString() !== courseId) }}).then((users))
+    // Course.deleteOne({ _id: courseId }).then(result => {
+    //     res.redirect('/');
+    // }).catch(err => {
+    //     handleErrors(err, res);
+    //     res.render('/');
+    // });
 
+
+    Course.findById(courseId).populate('usersEnrolled').then((course) => {
+
+        course.usersEnrolled.forEach(userId => {
+            User.findById(userId).then((user) => {
+                let courseArr = user.courses.filter(id => id.toString() !== courseId);
+                User.updateOne({ _id: userId }, { $set: { courses: courseArr } }).then(usersUpdated => {
+                }).catch(err => {
+                    handleError(err, res);
+                    res.render('500', { errorMessage: err.message });
+                });
+            }).catch(err => {
+                handleError(err, res);
+                res.render('500', { errorMessage: err.message });
+            });
+        });
+        Course.deleteOne({ _id: courseId }).then(coueseDeleted => {
+            res.redirect('/');
+        }).catch(err => {
+            handleError(err, res);
+            res.render('500', { errorMessage: err.message });
+        });
+        // Promise.all([course, User.updateMany({ _id: { $in: [course.usersEnrolled] } }, { $set: { courses: course.usersEnrolled.filter(id => id.toString() !== courseId) } }), Course.deleteOne({ _id: courseId })]).then(([course, usersUpdated, coueseDeleted]) => {
+        //     console.log(course);
+        //     console.log(usersUpdated);
+        //     console.log(coueseDeleted);
+        //     res.redirect('/');
+        // }).catch(err => {
+        //     handleError(err, res);
+        //     res.render('500', { errorMessage: err.message });
+        // })
+
+    }).catch(err => {
+        handleError(err, res);
+        res.render('500', { errorMessage: err.message });
+    });
 
     // Course.findById(courseId).then(course => {
     //     Promise.all([course, User.findById(course.creatorId)]).then(([course, user]) => {

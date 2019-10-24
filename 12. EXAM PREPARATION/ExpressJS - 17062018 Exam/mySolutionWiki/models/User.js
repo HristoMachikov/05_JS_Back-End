@@ -5,36 +5,36 @@ const userSchema = new Schema({
         type: String,
         required: [true, 'Username required'],
         unique: true,
-        validate: [{
-            validator: function (v) {
-                return /^[a-zA-Z0-9]*[a-zA-Z0-9]$/.test(v);
-            },
-            message: props => `${props.value} is not a valid username!`
-        },
-        {
-            validator: function (v) {
-                return v.length >= 5;
-            },
-            message: props => `username should be at least 5 characters long!`
-        }]
+        // validate: [{
+        //     validator: function (v) {
+        //         return /^[a-zA-Z0-9]*[a-zA-Z0-9]$/.test(v);
+        //     },
+        //     message: props => `${props.value} is not a valid username!`
+        // },
+        // {
+        //     validator: function (v) {
+        //         return v.length >= 5;
+        //     },
+        //     message: props => `username should be at least 5 characters long!`
+        // }]
     },
     password: {
         type: Schema.Types.String,
         required: [true, 'Password required'],
-        validate: [{
-            validator: function (v) {
-                return /^[a-zA-Z0-9]*[a-zA-Z0-9]$/.test(v);
-            },
-            message: props => `${props.value} is not a valid username!`
-        },
-        {
-            validator: function (v) {
-                return v.length >= 5;
-            },
-            message: props => `password should be at least 5 characters long!`
-        }]
+        // validate: [{
+        //     validator: function (v) {
+        //         return /^[a-zA-Z0-9]*[a-zA-Z0-9]$/.test(v);
+        //     },
+        //     message: props => `${props.value} is not a valid username!`
+        // },
+        // {
+        //     validator: function (v) {
+        //         return v.length >= 5;
+        //     },
+        //     message: props => `password should be at least 5 characters long!`
+        // }]
     },
-    courses: [{ type: Schema.Types.String, ref: 'Course' }],
+    articles: [{ type: Schema.Types.String, ref: 'Article' }],
     salt: { type: Schema.Types.String }
     // roles: [{ type: Schema.Types.String }]
 })

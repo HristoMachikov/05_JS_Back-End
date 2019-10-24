@@ -1,0 +1,34 @@
+<section>
+    <h2>Edit article
+    </h2>
+    <div class="spacer">
+        <form action="/article/edit/{{article._id}}" method="POST">
+            <label>Article title</label>
+            <h3>{{article.title}}</h3>
+            <label>Content</label>
+            <textarea name="description">{{article.description}}</textarea>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+</section>
+
+{{!-- <form class="text-center border border-light p-5" action="/course/edit/{{course._id}}" method="POST">
+    <h1>Edit Course</h1>
+    <div class="form-group">
+        <label for="title">Course Title</label>
+        <input type="text" class="form-control" placeholder="Course name" value="{{course.title}}" name="title">
+    </div>
+    <div class="form-group">
+        <label for="description">Course Description</label>
+        <textarea class="form-control" placeholder="Description" name="description">{{course.description}}</textarea>
+    </div>
+    <div class="form-group">
+        <label for="imageUrl">Image url</label>
+        <input type="text" class="form-control" placeholder="Image Url" value="{{course.imageUrl}}" name="imageUrl">
+    </div>
+    <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="check-box" name="checkBox"{{#if course.isPublic}} checked{{/if}}>
+        <label class="form-check-label" for="check-box">Public</label>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form> --}}

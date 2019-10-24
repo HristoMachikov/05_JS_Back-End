@@ -1,0 +1,37 @@
+<section id="notifications">
+    <p>Article description should be at least 20 characters long...</p>
+</section>
+<section>
+    <h2>Create new article</h2>
+    <div class="spacer">
+        <form action="/article/create" method="POST">
+            <label>Article title</label>
+            <input type="text" class="title" name="title" value="{{article.title}}">
+            <label>Content</label>
+            <textarea name="description">{{article.description}}</textarea>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+</section>
+
+
+{{!-- <form class="text-center border border-light p-5" action="/course/create" method="POST">
+    <h1>Create Course</h1>
+    <div class="form-group">
+        <label for="title">Course Title</label>
+        <input type="text" class="form-control" placeholder="Course name" name="title" value="{{course.title}}">
+    </div>
+    <div class="form-group">
+        <label for="description">Course Description</label>
+        <textarea class="form-control" placeholder="Description" name="description">{{course.description}}</textarea>
+    </div>
+    <div class="form-group">
+        <label for="imageUrl">Image url</label>
+        <input type="text" class="form-control" placeholder="Image Url" name="imageUrl" value="{{course.imageUrl}}">
+    </div>
+    <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="check-box" name="checkBox"{{#if course.isPublic}} checked{{/if}}>
+        <label class="form-check-label" for="check-box">Public</label>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form> --}}
