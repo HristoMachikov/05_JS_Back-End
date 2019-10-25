@@ -4,7 +4,7 @@ const articleSchema = new Schema({
     title: {
         type: Schema.Types.String,
         required: [true, 'Title required'],
-        unique: true
+        unique: [true, 'Title is already taken!']
     },
     description: {
         type: Schema.Types.String,

@@ -13,19 +13,22 @@ function createPost(req, res) {
     let { title = null, description = null } = req.body;
     const { user } = req;
     const article = { title, description };
-
-
     // const dateNow = new Date();
     // article.createdAt = dateNow.toDateString();
     article.authorId = user._id;
     Article.create(article).then(result => {
-        console.log(result);
-        let articlesArr = user.articles.push(result._id);
-        User.updateOne({ _id: user._id }, { $set: { articles: articlesArr } }).then(updated => {
-            console.log('Successfully added!');
-            res.redirect('/');
-        })
+        user.articles.push(result._id);
+        return User.updateOne({ _id: user._id }, { $set: { articles: user.articles } })
+    }).then(updated => {
+        console.log('Successfully added!');
+        res.redirect('/');
     }).catch(err => {
+        if (err.name === 'MongoError' && err.code === 11000) {
+            const error = "Article with this name exist!"
+            handleError(error, res);
+            res.render('article/create', { article, user });
+            return;
+        }
         handleErrors(err, res);
         // cube.options = options(cube);
         res.render('article/create', { article, user });
@@ -63,40 +66,26 @@ function editPost(req, res) {
 
 function deleteGet(req, res) {
     const articleId = req.params.id;
-    let usersEnrolledArr = [];
-
+    const { user } = req;
     Article.findById(articleId).then((article) => {
-        User.findById(article.authorId).then((user) => {
-            let articlesArr = user.articles.filter(id => id.toString() !== articleId);
-            User.updateOne({ _id: userId }, { $set: { articles: articlesArr } }).then(userUpdated => {
-            }).catch(err => {
-                handleError(err, res);
-                res.render('500', { errorMessage: err.message });
-            });
-        }).catch(err => {
-            handleError(err, res);
-            res.render('500', { errorMessage: err.message });
-        });
-        Article.deleteOne({ _id: articleId }).then(articleDeleted => {
-            res.redirect('/');
-        }).catch(err => {
-            handleError(err, res);
-            res.render('500', { errorMessage: err.message });
-        });
-
+        return Promise.all([
+            article,
+            User.updateOne({ _id: user.id }, { $set: { articles: user.articles.filter(id => id.toString() !== articleId) } }),
+            Article.deleteOne({ _id: articleId })
+        ]);
+    }).then(([article, userUpdated, articleDeleted]) => {
+        res.redirect('/');
     }).catch(err => {
         handleError(err, res);
         res.render('500', { errorMessage: err.message });
     });
-
-}
+};
 
 function detailsGet(req, res, next) {
     let articleId = req.params.id;
     const { user } = req;
     Article.findById(Object(articleId)).then(article => {
-
-        isAuthor = article.authorId === user.id;
+        isAuthor = article.authorId.toString() === user.id.toString();
         res.render('article/details', { article, user, isAuthor });
     }).catch(err => {
         handleErrors(err, res);

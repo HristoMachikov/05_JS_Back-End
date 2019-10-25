@@ -20,14 +20,15 @@ const { handleError } = require('./index');
 
 module.exports = {
     homeGet: (req, res, next) => {
-        const { user } = req;  
+        const { user } = req;
         Article.find()
-        // .sort("-createdAt")
-        // .limit(3)
-            .then(articles => { 
+            // .then(articles => {
+            .sort("-createdAt").limit(3)
+            .then(articles => {
 
-                // articles.forEach(a=> a.description.split(' ').splice(0,50).join(' '))
-
+                // .limit(3)
+                let articlesNew = articles.forEach(a => a.description.toString().split(' ').splice(0, 50).join(' '));
+                console.log(articlesNew);
                 // if (user) {  
                 //     // if (user.isAdmin) {
                 //     //     res.render('admin/index', {
@@ -44,13 +45,14 @@ module.exports = {
                 //     // cube.forEach(cube => cube.isCreator = cube.creatorId === user.id);
                 // }
 
-                let lastArticles = articles
-                    // .filter(obj => obj.isPublic === true)
-                    .sort((a, b) => a.createdAt - b.createdAt)
-                    .splice(0, 3);
+                // articles
+                //     // .filter(obj => obj.isPublic === true)
+                //     .sort((a, b) => b.createdAt - a.createdAt)
+                //     .splice(3)
+
 
                 res.render('index', {
-                    lastArticles: lastArticles.length > 0 ? lastArticles : false,
+                    articles,
                     user
                 });
             })
@@ -92,7 +94,7 @@ module.exports = {
         //     };
         // }
         Article.find(query).then(articles => {
-            res.render('article/search', { articles, user });
+            res.render('article/search', { articles, user, search });
         })
         // // cubeModel.find()
         // //     .where('difficulty')
