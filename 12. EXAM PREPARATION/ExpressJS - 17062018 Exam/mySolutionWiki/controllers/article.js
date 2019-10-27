@@ -84,8 +84,9 @@ function deleteGet(req, res) {
 function detailsGet(req, res, next) {
     let articleId = req.params.id;
     const { user } = req;
-    Article.findById(Object(articleId)).then(article => {
+    Article.findById(articleId).then(article => {
         isAuthor = article.authorId.toString() === user.id.toString();
+        article.paragraphs = article.description.split('\r\n\r\n');
         res.render('article/details', { article, user, isAuthor });
     }).catch(err => {
         handleErrors(err, res);
@@ -101,53 +102,6 @@ function allGet(req, res, next) {
         handleErrors(err, res);
     })
 }
-
-// function enrollGet(req, res, next) {
-//     let courseId = req.params.id;
-//     const { user } = req;
-//     Promise.all([
-//         Course.updateOne({ _id: courseId }, { $push: { usersEnrolled: user.id } }),
-//         User.updateOne({ _id: user.id }, { $push: { courses: courseId } })
-//     ]).then(([courseUpdated, userUpdated]) => {
-//         Course.findById(Object(courseId)).then((course) => {
-//             course.usersEnrolled.forEach(element => {
-//                 if (element.toString() === user.id) {
-//                     course.isEnrolled = true;
-//                     return;
-//                 }
-//             });
-//             res.render('course/details', { course, user });
-//         }).catch(err => {
-//             handleErrors(err, res);
-//         })
-//     }).catch(err => {
-//         handleErrors(err, res);
-//     })
-// }
-
-
-// function detailsPost(req, res, next) {
-//     let courseId = req.params.id;
-//     const { user } = req;
-//     Promise.all([
-//         Course.updateOne({ _id: courseId }, { $push: { usersEnrolled: user.id } }),
-//         User.updateOne({ _id: user.id }, { $push: { courses: courseId } })
-//     ]).then(([courseUpdated, userUpdated]) => {
-//         Course.findById(Object(courseId)).populate('lectures').then((course) => {
-//             course.usersEnrolled.forEach(element => {
-//                 if (element.toString() === user.id) {
-//                     course.isEnrolled = true;
-//                     return;
-//                 }
-//             });
-//             res.render('course/details', { course, user });
-//         }).catch(err => {
-//             handleErrors(err, res);
-//         })
-//     }).catch(err => {
-//         handleErrors(err, res);
-//     })
-// }
 
 module.exports = {
     createGet,

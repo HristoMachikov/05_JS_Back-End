@@ -27,8 +27,8 @@ module.exports = {
             .then(articles => {
 
                 // .limit(3)
-                let articlesNew = articles.forEach(a => a.description.toString().split(' ').splice(0, 50).join(' '));
-                console.log(articlesNew);
+                articles.forEach(a => a.description = a.description.split(' ').slice(0, 50).join(' '));
+                
                 // if (user) {  
                 //     // if (user.isAdmin) {
                 //     //     res.render('admin/index', {

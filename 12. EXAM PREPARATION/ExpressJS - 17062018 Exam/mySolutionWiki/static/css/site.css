@@ -207,8 +207,8 @@ main span.error {
     display: block;
 }
 
-/*Animations & Transitions
-*/
+/* Animations & Transitions */
+
 
 @-webkit-keyframes fadeOut {
     from {
@@ -226,4 +226,4 @@ main span.error {
     to {
         opacity: 0;
     }
-}
+} 

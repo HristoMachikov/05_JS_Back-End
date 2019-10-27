@@ -39,13 +39,25 @@
             </header>
             <main>
                 <h1>Welcome to SoftUni Wiki!</h1>
+
                 {{#each globalErrors}}
+                <section id="notifications">
+                    <p>{{this}}</p>
+                </section>
+                {{/each}}
+                {{#if globalError}}
+                <section id="notifications">
+                    <p>{{globalError}}</p>
+                </section>
+                {{/if}}
+
+                {{!-- {{#each globalErrors}}
                 <span class="error">{{this}}</span>
                 {{/each}}
 
                 {{#if globalError}}
                 <span class="error">{{globalError}}</span>
-                {{/if}}
+                {{/if}} --}}
                 {{{body}}}
             </main>
             <footer>
